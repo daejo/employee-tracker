@@ -5,3 +5,15 @@ CREATE TABLE employee (
   role_id INTEGER UNSIGNED NOT NULL,
   manager_id INTEGER 
 );
+
+CREATE TABLE role (
+  id INTEGER PRIMARY KEY,
+  title VARCHAR(30) NOT NULL,
+  salary DECIMAL NOT NULL,
+  department_id  INTEGER
+);
+
+CREATE TABLE department (
+  id INTEGER PRIMARY KEY,
+  name VARCHAR(30) NOT NULL,
+);
