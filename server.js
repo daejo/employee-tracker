@@ -8,7 +8,8 @@
 // Initilizes Node.js ||  npm init --y
 // Creates .gitignore and adds node_modules inside ||  echo "node_modules/" > .gitignore
 // Installs express ||  npm install express
-// Installs jest ||  npm install jest --save-dev
+// Installs jest ||  npm install jest --save-dev\
+///TYPE || usr/local/mysql/bin/mysql -u root -p
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const { SearchSource } = require("jest");
@@ -18,37 +19,21 @@ const connection = mysql.createConnection({
   port: 3306,
   user: "root",
   password: "dwakin2008",
-  database: "employee_database",
+  database: "employee_database"
 });
 
 connection.connect(function (err) {
   if (err) throw err;
   console.log("START");
-  showDept();
-  showRoles();
   setTimeout(start, 1000);
 });
-
-function showDept() {
-    connection.query("SELECT * FROM department", function (err, result, fields) {
-        if(err) throw err;
-        // console.table(result);
-    });
-}
-
-function showRoles(){
-    connection.query("SELECT * FROM role", function (err, result, fields) {
-        if(err) throw err;
-        // console.log(result);
-    });
-}
 
 function start() {
     console.log("hello david");
     inquirer.prompt(
         {
             type: 'checkbox',
-            name: 'index',
+            name: 'main',
             message: 'What would you like to do?',
             choices: [
                 'View all employees',
@@ -57,12 +42,10 @@ function start() {
                 'Add an employee',
                 'Remove an employee',
                 'Update employee role',
-                'Update employee manager'
-            ]
-        }
-    )
-        .then(function(value) {
-            switch (value.index) {
+                'Update employee manager']
+        })
+        .then(function(response) {
+            switch (response.main) {
                 case 'View all employees':
                     connection.query("SELECT * FROM employees", function (err, result, fields) {
                         if(err) throw err;
@@ -72,11 +55,14 @@ function start() {
                 case 'View all employees by department':
                     connection.query("SELECT * FROM department", function (err, result, fields) {
                         if(err) throw err;
-                        // console.table(result);
+                        console.table(result);
                     });
                     break;
                 case 'View all employees by manager':
-                    viewAllByMgr();
+                    connection.query("SELECT * FROM department", function (err, result, fields) {
+                        if(err) throw err;
+                        console.table(result);
+                    });
                     break;
                 case 'Add an employee':
                     addEmployee();
@@ -85,20 +71,13 @@ function start() {
                     removeEmployee();
                     break;
                 case 'Update employee role':
-                    updateEmpRole();
+                    updateRole();
                     break;
                 case 'Update employee manager':
-                    updateEmpMgr();
+                    updateManager();
                     break;
             }
         })
 }
 
-// function search() {
-
-// }
-
-// function deleteRecord() {
-
-// }
 
