@@ -12,6 +12,7 @@
 
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const { SearchSource } = require("jest");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -56,6 +57,18 @@ function start() {
                 "Update",
                 "Delete",],
         }
-    ])
+    ]).then((response) => {
+        if (response === "Search") {
+            searchRecord();
+        } else if (response === "Update") {
+            updateRecord()
+        } else {
+            deleteRecord();
+        }   
+    })
+}
+
+function search() {
+    
 }
 
