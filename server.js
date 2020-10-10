@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
-
+  console.log("START");
   showDept();
   showRoles();
   setTimeout(start, 1000);
@@ -52,36 +52,10 @@ function start() {
             message: "What do you want to do?",
             type: "list",
             choices: [
-                "Show employees table",
-                "Engineer",
-                "Intern",],
-        },
-        {
-            name: "id",
-            type: "input",
-            message: "Enter the team member's ID number. (Required)",
-            validate: idInput => {
-                if (idInput) {
-                return true;
-                } else {
-                console.log("Please enter the team member's ID number!");
-                return false;
-                }
-            }
-        },
-        {
-            name: "email",
-            type: "input",
-            message: "Enter the team member's email address. (Required)",
-            validate: emailInput => {
-                if (emailInput) {
-                return true;
-                } else {
-                console.log("Please enter the team member's email address");
-                return false;
-                }
-            }
-        } 
+                "Search",
+                "Update",
+                "Delete",],
+        }
     ])
 }
 
