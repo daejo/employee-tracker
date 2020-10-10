@@ -13,7 +13,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
@@ -46,27 +46,42 @@ function showRoles(){
 
 function start() {
     console.log("hello david");
+    inquirer.prompt([  
+        {
+            name: "main",
+            message: "What do you want to do?",
+            type: "list",
+            choices: [
+                "Show employees table",
+                "Engineer",
+                "Intern",],
+        },
+        {
+            name: "id",
+            type: "input",
+            message: "Enter the team member's ID number. (Required)",
+            validate: idInput => {
+                if (idInput) {
+                return true;
+                } else {
+                console.log("Please enter the team member's ID number!");
+                return false;
+                }
+            }
+        },
+        {
+            name: "email",
+            type: "input",
+            message: "Enter the team member's email address. (Required)",
+            validate: emailInput => {
+                if (emailInput) {
+                return true;
+                } else {
+                console.log("Please enter the team member's email address");
+                return false;
+                }
+            }
+        } 
+    ])
 }
 
-// const express = require("express");
-// //const db = require("./db/database");
-// const PORT = process.env.PORT || 3001;
-// const app = express();
-
-// // EXPRESS MIDDLEWARE//
-// // ======================= //
-// app.use(express.urlencoded({ extended: false }));
-// app.use(express.json());
-// // ======================= //
-
-// // Default response for any other requests(Not Found) Catch all
-// app.use((req, res) => {
-//   res.status(404).end();
-// });
-
-// // Start server after DB connection
-// db.on("open", () => {
-//   app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-//   });
-// });
