@@ -9,7 +9,6 @@
 // Creates .gitignore and adds node_modules inside ||  echo "node_modules/" > .gitignore
 // Installs express ||  npm install express
 // Installs jest ||  npm install jest --save-dev
-
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const { SearchSource } = require("jest");
@@ -33,64 +32,73 @@ connection.connect(function (err) {
 function showDept() {
     connection.query("SELECT * FROM department", function (err, result, fields) {
         if(err) throw err;
-        console.log(result);
+        // console.table(result);
     });
 }
 
 function showRoles(){
     connection.query("SELECT * FROM role", function (err, result, fields) {
         if(err) throw err;
-        console.log(result);
+        // console.log(result);
     });
-
 }
 
 function start() {
     console.log("hello david");
-    inquirer.prompt([  
+    inquirer.prompt(
         {
-            name: "main",
-            message: "What do you want to do?",
-            type: "list",
+            type: 'checkbox',
+            name: 'index',
+            message: 'What would you like to do?',
             choices: [
-                "Search",
-                "Update",
-                "Delete",],
+                'View all employees',
+                'View all employees by department',
+                'View all employees by manager',
+                'Add an employee',
+                'Remove an employee',
+                'Update employee role',
+                'Update employee manager'
+            ]
         }
-    ]).then((response) => {
-        if (response === "Search") {
-            inquirer.prompt([  
-                {
-                    name: "searchBy",
-                    message: "How do you want to search by?",
-                    type: "list",
-                    choices: [
-                        "Employee",
-                        "Department",
-                        "Role",],
-                }
-            ]).then((responseE) => {
-                if (responseE === "Employee") {
-                    connection.query("SELECT * FROM employee", function (err, result, fields) {
+    )
+        .then(function(value) {
+            switch (value.index) {
+                case 'View all employees':
+                    connection.query("SELECT * FROM employees", function (err, result, fields) {
                         if(err) throw err;
-                        console.log(result);
+                        console.table(result);
                     });
-                } else if (responseE === "Department") {
-                    connection.query("SELECT * FROM employee", function (err, result, fields) {
+                    break;
+                case 'View all employees by department':
+                    connection.query("SELECT * FROM department", function (err, result, fields) {
                         if(err) throw err;
-                        console.log(result);
+                        // console.table(result);
                     });
-                }        
-            })
-        } else if (response === "Update") {
-            updateRecord()
-        } else {
-            deleteRecord();
-        }   
-    })
+                    break;
+                case 'View all employees by manager':
+                    viewAllByMgr();
+                    break;
+                case 'Add an employee':
+                    addEmployee();
+                    break;
+                case 'Remove an employee':
+                    removeEmployee();
+                    break;
+                case 'Update employee role':
+                    updateEmpRole();
+                    break;
+                case 'Update employee manager':
+                    updateEmpMgr();
+                    break;
+            }
+        })
 }
 
-function search() {
+// function search() {
 
-}
+// }
+
+// function deleteRecord() {
+
+// }
 
