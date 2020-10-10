@@ -59,7 +59,29 @@ function start() {
         }
     ]).then((response) => {
         if (response === "Search") {
-            searchRecord();
+            inquirer.prompt([  
+                {
+                    name: "searchBy",
+                    message: "How do you want to search by?",
+                    type: "list",
+                    choices: [
+                        "Employee",
+                        "Department",
+                        "Role",],
+                }
+            ]).then((responseE) => {
+                if (responseE === "Employee") {
+                    connection.query("SELECT * FROM employee", function (err, result, fields) {
+                        if(err) throw err;
+                        console.log(result);
+                    });
+                } else if (responseE === "Department") {
+                    connection.query("SELECT * FROM employee", function (err, result, fields) {
+                        if(err) throw err;
+                        console.log(result);
+                    });
+                }        
+            })
         } else if (response === "Update") {
             updateRecord()
         } else {
@@ -69,6 +91,6 @@ function start() {
 }
 
 function search() {
-    
+
 }
 
