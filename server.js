@@ -10,6 +10,7 @@
 // Installs express ||  npm install express
 // Installs jest ||  npm install jest --save-dev\
 // Installs figlet || npm i figlet
+// install video link https://drive.google.com/file/d/1e0Y_wRRSZ20-2VMoCeGahEP1y9_D-16o/view
 
 // * ==============TO START============== *//
 ///TYPE IN TERMINAL TO CREATE TABLE || mysql -u root -p ||then|| source scheme.sql || then || source seeds.sql
