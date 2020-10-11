@@ -78,48 +78,35 @@ function start() {
 }
 
 function viewByDept() {
-        // Set global array to store department names
-        let deptArr = [];
-    
-        // Create new connection using promise-sql
-        connection.createConnection().then((conn) => {
-    
-            // Query just names of departments
-            return connection.query('SELECT name FROM department');
-        }).then(function(value){
-    
-            // Place all names within deptArr
-            deptQuery = value;
-            for (i=0; i < value.length; i++){
-                deptArr.push(value[i].name);
-                
-            }
-        }).then(() => {
-    
-            // Prompt user to select department from array of departments
-            inquirer.prompt({
-                name: "department",
-                type: "list",
-                message: "Which department would you like to search?",
-                choices: deptArr
-            })    
-            .then((answer) => {
-    
-                // Query all employees depending on selected department
-                const query = `SELECT employee.id AS ID, employee.first_name AS 'First Name', employee.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.name = '${answer.department}' ORDER BY ID ASC`;
-                connection.query(query, (err, res) => {
-                    if(err) return err;
+    inquirer.prompt(
+        {
+            type: 'list',
+            name: 'dept',
+            message: 'Which department do you want to view?',
+            choices: [
+                'Sales',
+                'Engineering',
+                'Finance',
+                'Legal']
+        }).then(function(response) {
+            switch (response.dept) {
+                case 'Sales':
                     
-                    // Show results in console.table
-                    console.log("\n");
-                    console.table(res);
-    
-                    // Back to main menu
-                    mainMenu();
-                });
-            });
-        });
-    
+                break;
+
+                case 'Engineering':
+                
+                break;
+
+                case 'Finance':
+                
+                break;
+
+                case 'Legal':
+                
+                break;
+            }
+        })
 }
 
 
