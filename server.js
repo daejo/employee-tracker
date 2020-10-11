@@ -42,7 +42,6 @@ function start() {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Remove an employee',
                 'Update employee role']
         })
         .then(function(response) {
@@ -171,20 +170,18 @@ function addRole() {
             name: "salary"
         },
         {
-            type: "list",
+            type: "input",
             message: "What's the department ID?",
-            name: "deptId",
-            choices: [
-                1, 2, 3, 4]
+            name: "deptId"
         }
     ]).then(function(response){
         console.log('Inserting a new role...\n');
         const query = connection.query(
         'INSERT INTO roles SET ?',
         {
-        title: response.role,
-        salary: response.salary,
-        department_id: response.deptId
+            title: response.role,
+            salary: response.salary,
+            department_id: response.deptId
         },
         function(err, res) {
         if (err) throw err;
@@ -201,6 +198,38 @@ function addRole() {
     })
 }
 
+function updateRole() {
+    console.log("Updating employee");
+    inquirer
+      .prompt({
+        name: "id",
+        type: "input",
+        message: "Enter employee id",
+      })
+      .then(function (response) {
+        let id = response.id;
+        inquirer
+          .prompt({
+            name: "roleId",
+            type: "input",
+            message: "Enter role id",
+          })
+          .then(function (response) {
+            let roleId = response.roleId;
+            let query = "UPDATE employee SET role_id=? WHERE id=?";
+            connection.query(query, [roleId, id], function (err, res) {
+              if (err) {
+                console.log(err);
+              }
+              connection.query("SELECT * FROM employee", function (err, result, fields) {
+                if(err) throw err;
+                console.table(result);
+                start();
+            });
+            });
+          });
+        });
+}
 
 
 
