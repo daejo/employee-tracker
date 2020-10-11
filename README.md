@@ -51,7 +51,7 @@
     * _Quit_
       * _Closes the application._  
   
-  [FULL USAGE VIDEO WALKTHROUGH](chrome-extension://mmeijimgabbpbgpdklnllpncmdofkcpn/ng/app/app.html#/files/1ebfcd1c-993c-4310-y986-2484c483462a)
+  [FULL USAGE VIDEO](chrome-extension://mmeijimgabbpbgpdklnllpncmdofkcpn/ng/app/app.html#/files/1ebfcd1c-993c-4310-y986-2484c483462a)
 
   ## Packages
 
