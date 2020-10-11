@@ -19,7 +19,7 @@ const connection = mysql.createConnection({
   port: 3306,
   user: "root",
   password: "dwakin2008",
-  database: "employee_database"
+  database: "employee"
 });
 
 connection.connect(function (err) {
@@ -29,10 +29,10 @@ connection.connect(function (err) {
 });
 
 function start() {
-    console.log("hello david");
+    console.log("");
     inquirer.prompt(
         {
-            type: 'checkbox',
+            type: 'list',
             name: 'main',
             message: 'What would you like to do?',
             choices: [
@@ -47,16 +47,13 @@ function start() {
         .then(function(response) {
             switch (response.main) {
                 case 'View all employees':
-                    connection.query("SELECT * FROM employees", function (err, result, fields) {
+                    connection.query("SELECT * FROM employee", function (err, result, fields) {
                         if(err) throw err;
                         console.table(result);
                     });
                     break;
                 case 'View all employees by department':
-                    connection.query("SELECT * FROM department", function (err, result, fields) {
-                        if(err) throw err;
-                        console.table(result);
-                    });
+                    viewByDept();
                     break;
                 case 'View all employees by manager':
                     connection.query("SELECT * FROM department", function (err, result, fields) {
@@ -78,6 +75,51 @@ function start() {
                     break;
             }
         })
+}
+
+function viewByDept() {
+        // Set global array to store department names
+        let deptArr = [];
+    
+        // Create new connection using promise-sql
+        connection.createConnection().then((conn) => {
+    
+            // Query just names of departments
+            return connection.query('SELECT name FROM department');
+        }).then(function(value){
+    
+            // Place all names within deptArr
+            deptQuery = value;
+            for (i=0; i < value.length; i++){
+                deptArr.push(value[i].name);
+                
+            }
+        }).then(() => {
+    
+            // Prompt user to select department from array of departments
+            inquirer.prompt({
+                name: "department",
+                type: "list",
+                message: "Which department would you like to search?",
+                choices: deptArr
+            })    
+            .then((answer) => {
+    
+                // Query all employees depending on selected department
+                const query = `SELECT employee.id AS ID, employee.first_name AS 'First Name', employee.last_name AS 'Last Name', role.title AS Title, department.name AS Department, role.salary AS Salary, concat(m.first_name, ' ' ,  m.last_name) AS Manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN role ON e.role_id = role.id INNER JOIN department ON role.department_id = department.id WHERE department.name = '${answer.department}' ORDER BY ID ASC`;
+                connection.query(query, (err, res) => {
+                    if(err) return err;
+                    
+                    // Show results in console.table
+                    console.log("\n");
+                    console.table(res);
+    
+                    // Back to main menu
+                    mainMenu();
+                });
+            });
+        });
+    
 }
 
 
