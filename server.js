@@ -37,8 +37,8 @@ function start() {
             message: 'What would you like to do?',
             choices: [
                 'View all employees',
-                'View all employees by department',
-                'View all employees by manager',
+                'View all departments',
+                'View all roles',
                 'Add an employee',
                 'Remove an employee',
                 'Update employee role',
@@ -52,11 +52,14 @@ function start() {
                         console.table(result);
                     });
                     break;
-                case 'View all employees by department':
-                    viewByDept();
-                    break;
-                case 'View all employees by manager':
+                case 'View all departments':
                     connection.query("SELECT * FROM department", function (err, result, fields) {
+                        if(err) throw err;
+                        console.table(result);
+                    });
+                    break;
+                case 'View all roles':
+                    connection.query("SELECT * FROM role", function (err, result, fields) {
                         if(err) throw err;
                         console.table(result);
                     });
@@ -73,38 +76,6 @@ function start() {
                 case 'Update employee manager':
                     updateManager();
                     break;
-            }
-        })
-}
-
-function viewByDept() {
-    inquirer.prompt(
-        {
-            type: 'list',
-            name: 'dept',
-            message: 'Which department do you want to view?',
-            choices: [
-                'Sales',
-                'Engineering',
-                'Finance',
-                'Legal']
-        }).then(function(response) {
-            switch (response.dept) {
-                case 'Sales':
-                    
-                break;
-
-                case 'Engineering':
-                
-                break;
-
-                case 'Finance':
-                
-                break;
-
-                case 'Legal':
-                
-                break;
             }
         })
 }
