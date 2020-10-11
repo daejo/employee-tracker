@@ -11,7 +11,7 @@
 // Installs jest ||  npm install jest --save-dev\
 
 // * ==============TO START============== *//
-///TYPE IN TERMINAL || mysql -u root -p
+///TYPE IN TERMINAL TO CREATE TABLE || mysql -u root -p ||then|| source scheme.sql || then || source seeds.sql
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const { SearchSource } = require("jest");
@@ -204,7 +204,7 @@ function updateRole() {
       .prompt({
         name: "id",
         type: "input",
-        message: "Enter employee id",
+        message: "Enter the employee's id whose role you are changing",
       })
       .then(function (response) {
         let id = response.id;
@@ -212,7 +212,7 @@ function updateRole() {
           .prompt({
             name: "roleId",
             type: "input",
-            message: "Enter role id",
+            message: "Enter the new employee id its going to be  changing",
           })
           .then(function (response) {
             let roleId = response.roleId;
