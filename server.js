@@ -9,28 +9,38 @@
 // Creates .gitignore and adds node_modules inside ||  echo "node_modules/" > .gitignore
 // Installs express ||  npm install express
 // Installs jest ||  npm install jest --save-dev\
+// Installs figlet || npm i figlet
 
 // * ==============TO START============== *//
 ///TYPE IN TERMINAL TO CREATE TABLE || mysql -u root -p ||then|| source scheme.sql || then || source seeds.sql
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const { SearchSource } = require("jest");
+const figlet = require('figlet'); //incharge of title display in terminal
 
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "password",
+  password: "dwakin2008",
   database: "employee"
 });
 
+ 
 connection.connect(function (err) {
-  if (err) throw err;
-  console.log("START");
-  setTimeout(start, 1000);
+    if (err) throw err;
+    figlet('EMPLOYEE TRACKER', function(err, data) {
+        if (err) {
+            console.log('Something went wrong...');
+            console.dir(err);
+            return;
+        }
+        console.log(data)
+    });
+    setTimeout(start, 1000);
 });
 
-function start() {
+function start() { //INCHARGE OF MAIN MENU OPTIONS
     console.log("");
     inquirer.prompt(
         {
@@ -44,7 +54,8 @@ function start() {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update employee role']
+                'Update employee role',
+                'Quit']
         })
         .then(function(response) {
             switch (response.main) {
@@ -59,12 +70,14 @@ function start() {
                     connection.query("SELECT * FROM department", function (err, result, fields) {
                         if(err) throw err;
                         console.table(result);
+                        start();
                     });
                     break;
                 case 'View all roles':
-                    connection.query("SELECT * FROM role", function (err, result, fields) {
+                    connection.query("SELECT * FROM roles", function (err, result, fields) {
                         if(err) throw err;
                         console.table(result);
+                        start();
                     });
                     break;
                 case 'Add a department':
@@ -79,7 +92,7 @@ function start() {
                 case 'Update employee role':
                     updateRole();
                     break;
-                case 'Update employee role':
+                case 'Quit':
                     quit();
                     break;
             }
