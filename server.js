@@ -109,4 +109,35 @@ function viewByDept() {
         })
 }
 
+function addEmployee() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What's the first name of the employee?",
+            name: "eFirstName"
+        },
+        {
+            type: "input",
+            message: "What's the last name of the employee?",
+            name: "eLastName"
+        },
+        {
+            type: "input",
+            message: "What's the employee's role id number?",
+            name: "roleId"
+        },
+        {
+            type: "input",
+            message: "What is the manager id number?",
+            name: "managerId"
+        }
+    ]).then(function(response){
+        connection.query("INSERT INTO employee (first_name, last_name, manager_id) VALUES (?, ?, ?, ?)", [response.eFirstName, response.eLastName, response.roleId, response.managerId], function(err,res){
+            if (err) throw err;
+            console.table(res);
+            start();
+        })
+    })
+}
+
 
