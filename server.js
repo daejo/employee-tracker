@@ -79,6 +79,9 @@ function start() {
                 case 'Update employee role':
                     updateRole();
                     break;
+                case 'Update employee role':
+                    quit();
+                    break;
             }
         })
 }
@@ -229,6 +232,11 @@ function updateRole() {
             });
           });
         });
+}
+
+function quit() {
+    console.log('Thank you! Closing employee tracker...');
+    process.exit();
 }
 
 
