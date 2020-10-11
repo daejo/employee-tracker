@@ -9,7 +9,9 @@
 // Creates .gitignore and adds node_modules inside ||  echo "node_modules/" > .gitignore
 // Installs express ||  npm install express
 // Installs jest ||  npm install jest --save-dev\
-///TYPE || usr/local/mysql/bin/mysql -u root -p
+
+// * ==============TO START============== *//
+///TYPE IN TERMINAL || mysql -u root -p
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const { SearchSource } = require("jest");
@@ -18,7 +20,7 @@ const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "dwakin2008",
+  password: "password",
   database: "employee"
 });
 
@@ -115,7 +117,6 @@ function addEmployee() {
         },
         function(err, res) {
         if (err) throw err;
-        console.log(res.affectedRows + ' employee inserted!\n');
         }
         );
         // logs the actual query being run
@@ -185,7 +186,6 @@ function addRole() {
         },
         function(err, res) {
         if (err) throw err;
-        console.log(res.affectedRows + ' role inserted!\n');
         }
         );
         // logs the actual query being run
