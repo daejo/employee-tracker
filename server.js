@@ -39,10 +39,11 @@ function start() {
                 'View all employees',
                 'View all departments',
                 'View all roles',
+                'Add a department',
+                'Add a role',
                 'Add an employee',
                 'Remove an employee',
-                'Update employee role',
-                'Update employee manager']
+                'Update employee role']
         })
         .then(function(response) {
             switch (response.main) {
@@ -50,6 +51,7 @@ function start() {
                     connection.query("SELECT * FROM employee", function (err, result, fields) {
                         if(err) throw err;
                         console.table(result);
+                        start();
                     });
                     break;
                 case 'View all departments':
@@ -64,17 +66,17 @@ function start() {
                         console.table(result);
                     });
                     break;
+                case 'Add a department':
+                    addDept();
+                    break;
+                case 'Add a role':
+                   addRole();
+                    break;
                 case 'Add an employee':
                     addEmployee();
                     break;
-                case 'Remove an employee':
-                    removeEmployee();
-                    break;
                 case 'Update employee role':
                     updateRole();
-                    break;
-                case 'Update employee manager':
-                    updateManager();
                     break;
             }
         })
@@ -103,12 +105,102 @@ function addEmployee() {
             name: "managerId"
         }
     ]).then(function(response){
-        connection.query("INSERT INTO employee (first_name, last_name, manager_id) VALUES (?, ?, ?, ?)", [response.eFirstName, response.eLastName, response.roleId, response.managerId], function(err,res){
-            if (err) throw err;
-            console.table(res);
+        console.log('Inserting a new employee...\n');
+        const query = connection.query(
+        'INSERT INTO employee SET ?',
+        {
+        first_name: response.eFirstName,
+        last_name: response.eLastName,
+        role_id: response.roleId,
+        manager_id: response.managerId
+        },
+        function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + ' employee inserted!\n');
+        }
+        );
+        // logs the actual query being run
+        console.log(query.sql);
+        connection.query("SELECT * FROM employee", function (err, result, fields) {
+            if(err) throw err;
+            console.table(result);
             start();
-        })
+        });
     })
 }
+
+function addDept() {
+    inquirer.prompt(
+        {
+            type: "input",
+            message: "What's the name of the new department?",
+            name: "department"
+        }
+    ).then(function(response){
+        console.log('Inserting a new department...\n');
+        const query = connection.query(
+        'INSERT INTO department SET ?',
+        {
+        name: response.department
+        },
+        function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + ' department added!\n');
+        }
+        );
+        // logs the actual query being run
+        console.log(query.sql);
+        connection.query("SELECT * FROM department", function (err, result, fields) {
+            if(err) throw err;
+            console.table(result);
+            start();
+        });
+    })
+}
+
+function addRole() {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "What's the title of your new role?",
+            name: "role"
+        },
+        {
+            type: "input",
+            message: "How much does this role make?",
+            name: "salary"
+        },
+        {
+            type: "list",
+            message: "What's the department ID?",
+            name: "deptId",
+            choices: [
+                1, 2, 3, 4]
+        }
+    ]).then(function(response){
+        console.log('Inserting a new role...\n');
+        const query = connection.query(
+        'INSERT INTO roles SET ?',
+        {
+        title: response.role,
+        salary: response.salary,
+        department_id: response.deptId
+        },
+        function(err, res) {
+        if (err) throw err;
+        console.log(res.affectedRows + ' role inserted!\n');
+        }
+        );
+        // logs the actual query being run
+        console.log(query.sql);
+        connection.query("SELECT * FROM roles", function (err, result, fields) {
+            if(err) throw err;
+            console.table(result);
+            start();
+        });
+    })
+}
+
+
 
 
